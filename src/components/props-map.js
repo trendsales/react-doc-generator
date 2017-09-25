@@ -16,20 +16,24 @@ class PropsMap extends Component {
     });
   }
 
+  getProps() {
+    return this.state;
+  }
+
   componentDidMount() {
     const { updater } = this.props;
-    updater.onSetComponent((doc) => {
-      const funcs = doc.funcs(this.setProps.bind(this));
+    updater.onSetComponent((doc, props, docFuncs) => {
+      const funcs = (docFuncs || doc.funcs)(this.setProps.bind(this), this.getProps.bind(this));
       this.setState({
         WrappedComponent: doc.Component,
-        props: Object.assign({}, doc.defaultProps, funcs),
+        props: Object.assign({}, props || doc.defaultProps, funcs),
       });
     });
     updater.onProps((props) => {
       this.setState({
         props,
       });
-    })
+    });
   }
 
   render() {

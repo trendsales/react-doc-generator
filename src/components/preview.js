@@ -6,8 +6,8 @@ const Wrapper = styled.div`
   flex: 1;
 `
 
-export default ({ doc }) => (
+export default ({ doc, props, funcs }) => (
   <Wrapper>
-    <Render doc={doc} />
+    <Render doc={doc} props={props} funcs={funcs} />
   </Wrapper>
 );

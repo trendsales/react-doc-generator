@@ -6,6 +6,22 @@ const Wrapper = styled.div`
   border-right: solid 1px black;
 `;
 
+const toTree = (obj) => {
+  const result = {};
+  docs.forEach(doc => {
+    const segments = doc.path.split('/');
+    const self = segments.pop();
+    let branch = result;
+    segments.forEach(segment => {
+      if (!branch[segment]) {
+        branch[segment] = {};
+      }
+      branch = branch[segment];
+    });
+    branch[self] = doc;
+  });
+}
+
 const Tree = ({ docs, onSelect }) => (
   <Wrapper>
     {docs.map(doc => (

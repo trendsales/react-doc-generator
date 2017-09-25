@@ -54,10 +54,10 @@ const retargetEvents = (shadowDom) => {
   }
 
 class Updater {
-  onSetComponent(fn) {
+  onSetComponent(fn, props, funcs) {
     this._onSetComponent = fn;
     if (this.WrappedComponent) {
-      fn(this.WrappedComponent);
+      fn(this.WrappedComponent, props, funcs);
     }
   }
   onProps(fn) {
@@ -66,9 +66,9 @@ class Updater {
       fn(this.props);
     }
   }
-  setComponent(WrappedComponent) {
+  setComponent(WrappedComponent, props, funcs) {
     if (this._onSetComponent) {
-      this._onSetComponent(WrappedComponent);
+      this._onSetComponent(WrappedComponent, props, funcs);
     } else {
       this.WrappedComponent = WrappedComponent;
     }
@@ -104,20 +104,26 @@ class Render extends Component {
     this.shadowRoot.appendChild(this.componentRoot);
     this.shadowRoot.appendChild(this.styleRoot);
     const doc = this.props.doc;
+    const props = this.props.props;
+    const funcs = this.props.funcs;
 
     ReactDOM.render(
       <PropsMap updater={this.updater} />,
       this.componentRoot,
     );
     if (doc) {
-      this.updater.setComponent(doc);
+      this.updater.setComponent(doc, props, funcs);
     }
     retargetEvents(this.shadowRoot);
   }
 
   componentWillReceiveProps(next) {
-    if (next.doc && next.doc !== this.props.doc)
-    this.updater.setComponent(next.doc);
+    /*if (next.doc && next.doc !== this.props.doc) {
+      this.updater.setComponent(next.doc, next.props, next.funcs);
+    } else if (next.props) {
+      this.updater.setProps(next.props, next.funcs);
+    }*/
+    this.updater.setComponent(next.doc, next.props, next.funcs);
   }
 
   shouldComponentUpdate(next) {

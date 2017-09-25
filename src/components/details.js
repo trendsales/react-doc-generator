@@ -2,6 +2,7 @@ import React from 'react';
 import Render from './render';
 import styled from 'styled-components';
 import marked from 'marked';
+
 marked.setOptions({
   renderer: new marked.Renderer(),
   gfm: true,
@@ -19,9 +20,14 @@ const Wrapper = styled.div`
   border-right: solid 1px black;
 `
 
-export default ({ doc }) => doc ? (
+export default ({ doc, setProps }) => doc ? (
   <Wrapper>
     <h1>{doc.path}</h1>
+    <div>
+      {(doc.variants).map(variant => (
+        <div onClick={() => setProps(variant)}>{variant.name}</div>
+      ))}
+    </div>
     <pre>
       {JSON.stringify(Object.keys(doc.propTypes) || {}, null, '  ')}
     </pre>

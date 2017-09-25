@@ -11,6 +11,11 @@ class ComponentDoc {
     this[fields.funcs] = options.funcs || emptyFunc;
     this.defaultProps = options.defaultProps || {};
     this.description = options.description;
+    this.variants = [...(options.variants || [])];
+    this.variants.push({
+      name: 'default',
+      props: this.defaultProps,
+    });
     let instance = (new Component({}));
     let BaseComponent = Component;
     while (instance.getRootComponent) {

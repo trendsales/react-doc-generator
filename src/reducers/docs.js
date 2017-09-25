@@ -17,6 +17,11 @@ export default (state = Object.assign({}, defaultState), { type, payload}) => {
         selected: payload,
       });
     }
+    case 'DOCS_SET_PROPS': {
+      return Object.assign({}, state, {
+        variant: payload,
+      });
+    }
     default: {
       return state;
     }
